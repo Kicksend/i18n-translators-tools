@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # vi: fenc=utf-8:expandtab:ts=2:sw=2:sts=2
-# 
+#
 # @author: Petr Kovar <pejuko@gmail.com>
 
 $KCODE="UTF8" if RUBY_VERSION < "1.9"
@@ -132,7 +132,7 @@ def process_locale(tr, command, opts)
   options.delete(:quiet) if command == 'list'
 
   print "#{tr.lang_file}..." unless options[:quiet]
-  
+
   msg = ""
   save_locale = false
   case command
@@ -163,7 +163,7 @@ def process_locale(tr, command, opts)
       msg = "doesn't exist #{tr.default_file}: Try --default_format" unless File.exists?(tr.default_file)
     end
   end
-  
+
   if save_locale
     tr.export!
   end
@@ -238,7 +238,6 @@ options.merge!(I18n::Translate.read_config(locale_config_file)) if File.exists?(
 # merge command line arguments
 options.merge!(tmp)
 
-
 # process command
 case command
 
@@ -272,7 +271,6 @@ when 'translate'
   translator.run
 
 else
-
   I18n::Translate.scan(options) do |tr|
     process_locale(tr, command, options)
   end

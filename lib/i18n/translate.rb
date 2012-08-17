@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vi: fenc=utf-8:expandtab:ts=2:sw=2:sts=2
-# 
+#
 # @author: Petr Kovar <pejuko@gmail.com>
 
 require 'fileutils'
@@ -130,6 +130,8 @@ module I18n::Translate
     o = Translate::DEFAULT_OPTIONS.merge(opts)
     o[:exclude] ||= []
 
+    desired_locale = o[:locale]
+
     entries = []
     if o[:deep] == true
       Find.find(o[:locale_dir]) {|e| entries << e}
@@ -139,16 +141,17 @@ module I18n::Translate
 
     locales = []
     entries.each do |entry|
-      locale, format = Translate.valid_file?(entry, o[:format])
-      if (not format) or (locale == o[:default])
+      locale_file_name, format = Translate.valid_file?(entry, o[:format])
+      if (not format) or (locale_file_name == o[:default])
         puts "#{entry}...skipping" if o[:verbose]
         next
       end
 
       # skip if not desired locale
-      if o[:locale] and (o[:locale] != "auto") and (o[:locale] != locale)
+      if desired_locale and (o[:locale] != "auto") and (!locale_file_name.include?(o[:locale]))
+      #if o[:locale] and (o[:locale] != "auto") and (o[:locale] != locale)
         puts "#{entry}...skipping" if o[:verbose]
-        next 
+        next
       end
 
       exclude = false
@@ -161,11 +164,13 @@ module I18n::Translate
       puts "#{entry}...excluded" if exclude and o[:verbose]
       next if exclude
 
-      locales << entry 
+      locales << entry
       dir = File.dirname(entry)
 
       if block
-        yield Translate.new(locale, o.merge({:format => format, :locale_dir => dir, :default => o[:default]}))
+        yield Translate.new(locale_file_name,
+                            o.merge({:format => format, :locale_dir => dir, :default => o[:default],
+                                     :base_locale => desired_locale}))
       end
 
     end
@@ -198,6 +203,7 @@ module I18n::Translate
     # loads default and lang files
     def initialize(lang, opts={})
       @lang = lang.to_s
+      @base_locale = opts[:base_locale]
       raise "Empty locale" if @lang.empty? and not opts[:empty]
 
       # merge options
@@ -212,7 +218,10 @@ module I18n::Translate
 
       # load default data and translation
       if @lang and not opts[:empty]
-        @default, @default_file = load_locale( @options[:default], @options[:default_format] )
+        # Rails doesn't have an unlocalized default
+        #@default, @default_file = load_locale( @options[:default], @options[:default_format] )
+        @default = {}
+        @default_file = ''
         @target, @lang_file = load_locale( @lang )
         merge!
       end
@@ -253,7 +262,7 @@ module I18n::Translate
       if d.kind_of? Hash
         entry["default"] = d["translation"] || d["t"] || d["default"]
       end
-      
+
       # translation doesn't exist
       trg = I18n::Translate.find(key, @target, @options[:separator])
       if (not trg) or
@@ -283,7 +292,7 @@ module I18n::Translate
         end
       end
 
-      # nothing has changed 
+      # nothing has changed
       entry["old_default"] = trg.kind_of?(Hash) ? trg["old_default"].to_s.strip : ""
       entry["old_translation"] = ""
       entry["translation"] = trg.kind_of?(Hash) ? trg["translation"].to_s.strip : trg.to_s.strip
@@ -351,7 +360,7 @@ module I18n::Translate
         if flag == "ok"
           trg["translation"] = new_t.empty? ? old_t : new_t
           trg["default"] = default
-          trg["old_default"] = "" 
+          trg["old_default"] = ""
         else
           trg["translation"] = new_t.empty? ? old_t : new_t
           trg["default"] = default
@@ -425,7 +434,7 @@ module I18n::Translate
         next unless entry.kind_of?(Hash)
         self[key] = entry["translation"]
       end
-  
+
       self
     end
 
@@ -464,7 +473,8 @@ module I18n::Translate
 
       if File.exists?(fname)
         data = Processor.read(fname, self)
-        return [data[lang], fname]
+
+        return [data[@base_locale || lang], fname]
       else
         STDERR << "Warning: I18n::Translate#load_locale: file `#{fname}' does NOT exists. Creating empty locale.\n"
       end
