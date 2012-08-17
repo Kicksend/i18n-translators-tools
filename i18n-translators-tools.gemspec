@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vi: fenc=utf-8:expandtab:ts=2:sw=2:sts=2
-# 
+#
 # @author: Petr Kovar <pejuko@gmail.com>
 
 require 'rubygems'
@@ -13,7 +13,7 @@ spec = Gem::Specification.new do |s|
   s.email = "pejuko@gmail.com"
   s.authors = ["Petr Kovar"]
   s.name = 'i18n-translators-tools'
-  s.version = '0.2.4'
+  s.version = '0.2.5'
   s.date = Time.now.strftime("%Y-%m-%d")
   s.add_dependency('i18n', '>= 0.5.0')
   s.add_dependency('ya2yaml')
@@ -76,6 +76,10 @@ Changelog:
     * flag obsolete added
     * delete function
     * i18n-0.5.0 compatibility (for older i18n user v0.2.3)
+
+  v0.2.4
+    * Kicksend modification
+    * Ignores msgid and rolls up msgstr to msgctxt to make it Rails i18n format compatible
 
 For more information read README.md and CHANGELOG.md
 

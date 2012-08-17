@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vi: fenc=utf-8:expandtab:ts=2:sw=2:sts=2
-# 
+#
 # @author: Petr Kovar <pejuko@gmail.com>
 
 module I18n::Translate::Processor
@@ -8,7 +8,7 @@ module I18n::Translate::Processor
   class Gettext < Template
     FORMAT = ['po', 'pot']
 
-  protected
+    protected
 
     def import(data)
       hash = {}
@@ -28,79 +28,69 @@ module I18n::Translate::Processor
           entry = {}
           next
         end
-        
+
         case line
 
-        # translator's comment
-        when %r{^# (.*)$}
-          entry["comment"] = $1.to_s.strip
+          # translator's comment
+          when %r{^# (.*)$}
+            entry["comment"] = $1.to_s.strip
 
-        # extracted comment
-        when %r{^#\. (.*)$}
-          entry["extracted_comment"] = $1.to_s.strip
+          # extracted comment
+          when %r{^#\. (.*)$}
+            entry["extracted_comment"] = $1.to_s.strip
 
-        # reference
-        when %r{^#: (.*)$}
-          entry["reference"] = $1.to_s.strip
-          if entry["reference"] =~ %r{^(.*):(\d+)$}
-            entry["file"] = $1.to_s.strip
-            entry["line"] = $2.to_s.strip
-          end
-
-        # flag
-        when %r{^#, (.*)$}
-          flags = $1.split(",").compact.map{|x| x.strip}
-          fuzzy = flags.delete("fuzzy")
-          unless fuzzy
-            entry["flag"] = "ok"
-          else
-            flags.delete_if{|x| not I18n::Translate::FLAGS.include?(x)}
-            entry["flag"] = flags.first unless flags.empty?
-            entry["fuzzy"] = true
-          end
-
-        # old default
-        when %r{^#\| msgid "(.*)"$}
-          entry["old_default"] = $1.to_s
-          # expect that this entry has no key
-          # if does, will be overwriten later
-          key = entry["old_default"].dup
-
-        # key (context)
-        when %r{^msgctxt "(.*)"$}
-          key = $1.to_s.strip
-          last = "key"
-
-        # default
-        when %r{^msgid "(.*)"$}
-          if $1.to_s.strip.empty?
-            last = "po-header"
-          else
-            last = "default"
-            entry[last] = uninspect($1.to_s)
-            key = entry[last].dup unless key
-          end
-
-        # translation
-        when %r{^msgstr "(.*)"$}
-          last = "translation" unless last == "po-header"
-          entry[last] = uninspect($1.to_s)
-
-        # string continuation
-        when %r{^"(.*)"$}
-          if last == "key"
-            key = "#{key}#{$1}"
-          elsif last == "po-header"
-            case $1
-            when %r{^Content-Type: text/plain; charset=(.*)$}
-              enc = uninspect($1.to_s).strip
-              @translate.options[:encoding] = enc unless enc.empty?
-            when %r{^X-Language: (.*)$}
-              # skip language is set from filename
+          # reference
+          when %r{^#: (.*)$}
+            entry["reference"] = $1.to_s.strip
+            if entry["reference"] =~ %r{^(.*):(\d+)$}
+              entry["file"] = $1.to_s.strip
+              entry["line"] = $2.to_s.strip
             end
-          elsif last
-            entry[last] = "#{entry[last]}#{uninspect($1)}"
-          end
+
+          # flag
+          when %r{^#, (.*)$}
+            flags = $1.split(",").compact.map { |x| x.strip }
+            fuzzy = flags.delete("fuzzy")
+            unless fuzzy
+              entry["flag"] = "ok"
+            else
+              flags.delete_if { |x| not I18n::Translate::FLAGS.include?(x) }
+              entry["flag"] = flags.first unless flags.empty?
+              entry["fuzzy"] = true
+            end
+
+          # old default
+          when %r{^#\| msgid "(.*)"$}
+            entry["old_default"] = $1.to_s
+            # expect that this entry has no key
+            # if does, will be overwriten later
+            key = entry["old_default"].dup
+
+          # key (context)
+          when %r{^msgctxt "(.*)"$}
+            key = $1.to_s.strip
+            last = "key"
+
+          # translation
+          when %r{^msgstr "(.*)"$}
+            value = uninspect($1.to_s)
+            entry = value unless value.nil? || value == ''
+
+          # string continuation
+          when %r{^"(.*)"$}
+            if last == "key"
+              key = "#{key}#{$1}"
+            elsif last == "po-header"
+              case $1
+                when %r{^Content-Type: text/plain; charset=(.*)$}
+                  enc = uninspect($1.to_s).strip
+                  @translate.options[:encoding] = enc unless enc.empty?
+                when %r{^X-Language: (.*)$}
+                  # skip language is set from filename
+              end
+            elsif last
+              entry[last] = "#{entry[last]}#{uninspect($1)}"
+            end
 
         end
       end
