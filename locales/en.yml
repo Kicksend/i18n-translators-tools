@@ -1,0 +1,175 @@
+--- 
+en: 
+  ab_tests: 
+    file_lock_copy: 
+      extra_privacy: 
+        translation: "Extra Privacy"
+      verify_recipient: 
+        translation: "Verify Recipient"
+  devise: 
+    confirmations: 
+      confirmed: 
+        translation: "Your account was successfully confirmed. You are now signed in."
+      resent_instructions: 
+        translation: "You haven't confirmed your account. We have just sent you another email to help you do so."
+      send_instructions: 
+        translation: "You will receive an email with instructions about how to confirm your account in a few minutes."
+    failure: 
+      inactive: 
+        translation: "Your account was not activated yet."
+      invalid: 
+        translation: "Invalid email or password."
+      invalid_token: 
+        translation: "Invalid authentication token."
+      locked: 
+        translation: "Your account is locked."
+      timeout: 
+        translation: "Your session expired, please sign in again to continue."
+      unauthenticated: 
+        translation: "You need to sign in or sign up before continuing."
+      unconfirmed: 
+        translation: "You have to confirm your account before continuing."
+    mailer: 
+      confirmation_instructions: 
+        subject: 
+          translation: "Activate your Kicksend account"
+      reset_password_instructions: 
+        subject: 
+          translation: "Resetting your Kicksend password"
+      unlock_instructions: 
+        subject: 
+          translation: "Unlock Instructions"
+    passwords: 
+      send_instructions: 
+        translation: "You will receive an email with instructions about how to reset your password in a few minutes."
+      updated: 
+        translation: "Your password was changed successfully. You are now signed in."
+    registrations: 
+      destroyed: 
+        translation: "Bye! Your account was successfully cancelled. We hope to see you again soon."
+      signed_up: 
+        translation: "You have signed up successfully. If enabled, a confirmation was sent to your e-mail."
+      updated: 
+        translation: "You updated your account successfully."
+    sessions: 
+      invalid_login: 
+        translation: "We couldn't log you in. Please check your email address and password."
+      signed_in: 
+        translation: "Signed in successfully."
+      signed_out: 
+        translation: "Signed out successfully."
+    unlocks: 
+      send_instructions: 
+        translation: "You will receive an email with instructions about how to unlock your account in a few minutes."
+      unlocked: 
+        translation: "Your account was successfully unlocked. You are now signed in."
+  emails: 
+    common: 
+      announcement_unsub_text: 
+        translation: "If you'd like to stop getting announcement emails, click below:"
+      email_unsubscribe: 
+        translation: "Email Unsubscribe"
+      kicksend_team: 
+        translation: "The Kicksend Team"
+      made_with_love: 
+        translation: "Made with love in California"
+      thanks: 
+        translation: "Thanks,"
+    confirmation_follow_up: 
+      subjects: 
+        first: 
+          translation: "You're just one step away from sending photos on Kicksend"
+        last: 
+          translation: "We miss you at Kicksend. Let's get activated."
+        second: 
+          translation: "Activate your Kicksend account now"
+    email_invite: 
+      subjects: 
+        connect: 
+          translation: "Connect with %{name} on Kicksend"
+        join_me: 
+          translation: "Send me photos with Kicksend"
+        photos: 
+          translation: "%{name} wants to send lots of photos to you on Kicksend"
+        photos_files: 
+          translation: "%{name} wants to send lots of photos to you"
+    file_delivery_failure_notification: 
+      subject: 
+        translation: "Your files could not be delivered to %{receiver_name}"
+    invalid_fb_follow_up: 
+      subject: 
+        translation: "%{name}: Here's a Kicksend tip for you"
+    layouts: 
+      clouds: 
+        did_you_know: 
+          translation: "Did you know?"
+        mobile_cta: 
+          translation: "Go Mobile"
+        social_connect_cta: 
+          translation: "Connect with us"
+    signup_followup: 
+      body: 
+        checking_in_html: 
+          translation: "We’re just checking in to see how you’re doing. Have you %{send_cta}? Have you made a list so you can send photos to all of your family members at once? Anything we can help with?"
+        day_2: 
+          translation: "It’s Day 2 of your brand new life where sending photos and videos to loved ones is a snap."
+        day_2_html: 
+          translation: "It’s <b>Day 2</b> of your brand new life where sending photos and videos to loved ones is a snap."
+        did_you_know_content_html: 
+          translation: "Kicksend is based out of beautiful, sunny <a style='color: #fff' href='http://en.wikipedia.org/wiki/Mountain_View,_California'>Mountain View</a>, in the heart of Silicon Valley. Check out our <a style='color: #fff' href='http://www.facebook.com/media/set/?set=a.403005473050058.112941.321890147828258&type=1'>team pics</a>!"
+        greeting: 
+          translation: "Hey %{name}!"
+        let_us_know: 
+          translation: "Just let us know - reply directly to this email or reach us at contact@kicksend.com."
+        send_cta: 
+          translation: "sent your first set of photos"
+      subject: 
+        translation: "How's it going?"
+  errors: 
+    messages: 
+      already_confirmed: 
+        translation: "has already been confirmed."
+      not_found: 
+        translation: "can't be found."
+      not_locked: 
+        translation: "was not locked"
+  fb_invite_text: 
+    add_me: 
+      translation: "Add me on Kicksend so I can send you files privately"
+    join_me: 
+      translation: "Join me on Kicksend, it's a great way to send files"
+  mobile_notifications: 
+    connection_confirmed: 
+      translation: "%{name} confirmed you as a friend"
+    connection_request: 
+      translation: "%{name} wants to be your friend"
+    message_received: 
+      translation: "%{name} just sent you a message"
+  sms: 
+    delivery_notification: 
+      greeting: 
+        translation: "Hey %{receiver_name}!"
+      message: 
+        translation: "You have %{items} from %{sender_name} on Kicksend. Check them out - %{link}"
+    verfication: 
+      message: 
+        translation: "Kicksend: %{code}"
+  sms_invite_text: 
+    add_me: 
+      translation: "Hey %{receiver_name}, %{sender_name} has invited you to Kicksend, a great way to send photos from your phone. Get it here - %{link}"
+    add_me_no_name: 
+      translation: "Hey there, %{sender_name} has invited you to Kicksend, a great way to send photos from your phone. Get it here - %{link}"
+    join_me: 
+      translation: "Hey %{receiver_name} join me on Kicksend, a great way to send photos from your phone %{link} - %{sender_name}"
+    join_me_no_name: 
+      translation: "Hey, join me on Kicksend, a great way to send photos from your phone %{link} - %{sender_name}"
+  twilio: 
+    download_sms: 
+      iphone_app: 
+        translation: "Hey %{name}, click here to get the Kicksend iPhone app from the App Store: %{link}"
+  vocab: 
+    photos: 
+      one: 
+        translation: "one photo"
+      other: 
+        translation: "%{count} photos"

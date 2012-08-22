@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # vi: fenc=utf-8:expandtab:ts=2:sw=2:sts=2
-# 
+#
 # @author: Petr Kovar <pejuko@gmail.com>
 
 require 'strscan'
@@ -45,11 +45,11 @@ module I18n::Translate::Processor
           # translator's comment
           if s.scan %r{\s+}
             entry["comment"] = s.scan(/.*?$/).to_s.strip
-  
+
           # extracted comment
           elsif s.scan %r{\.\s+}
             entry["extracted_comment"] = s.scan(/.*?$/).to_s.strip
-  
+
           # reference
           elsif s.scan %r{:\s+}
             entry["reference"] = s.scan(/.*?$/).to_s.strip
@@ -57,7 +57,7 @@ module I18n::Translate::Processor
               entry["file"] = $1.to_s.strip
               entry["line"] = $2.to_s.strip
             end
-  
+
           # flag
           elsif s.scan %r{,\s+}
             flags = s.scan(/.*?$/).split(",").compact.map{|x| x.strip}
@@ -69,7 +69,7 @@ module I18n::Translate::Processor
               entry["flag"] = flags.first unless flags.empty?
               entry["fuzzy"] = true
             end
-  
+
           # old default
           elsif s.scan %r{\| msgid\s+"}
             match = s.scan(%r{.*"$}).to_s[0..-2]
@@ -81,20 +81,9 @@ module I18n::Translate::Processor
         end # end of scan for comments
 
         # key (context)
-        if s.scan %r{msgctxt\s+"}
+        if s.scan %r{msgid\s+"}
           key = get_string(s)
           last = "key"
-
-        # default
-        elsif s.scan %r{msgid\s+"}
-          match = get_string(s)
-          if match.empty?
-            last = "po-header"
-          else
-            last = "default"
-            entry[last] = uninspect(match)
-            key = entry[last].dup unless key
-          end
 
         # translation
         elsif s.scan %r{msgstr\s+"}
@@ -147,8 +136,7 @@ module I18n::Translate::Processor
         if value.kind_of?(String)
           # leave out msgctxt if using po strings as a key
           default = @translate.find(key, @translate.default)
-          entry << %~msgctxt #{key.inspect}~ if key != default
-          entry << %~msgid #{default.to_s.inspect}~
+          entry << %~msgid #{key.inspect}~ if key != default
           entry << %~msgstr #{value.to_s.inspect}~
         else
           entry << %~#  #{value["comment"].to_s.strip}~ unless value["comment"].to_s.strip.empty?
@@ -166,8 +154,7 @@ module I18n::Translate::Processor
           flags << value["flag"] unless value["flag"].to_s.strip.empty?
           entry << %~#, #{flags.join(", ")}~ unless flags.empty?
           entry << %~#| msgid #{value["old_default"].to_s.inspect}~ unless value["old_default"].to_s.empty?
-          entry << %~msgctxt #{key.inspect}~ if key != key_default
-          entry << %~msgid #{value["default"].to_s.inspect}~
+          entry << %~msgid #{key.inspect}~ if key != key_default
           entry << %~msgstr #{value["translation"].to_s.inspect}~
         end
 

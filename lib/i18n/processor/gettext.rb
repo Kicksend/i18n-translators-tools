@@ -59,15 +59,8 @@ module I18n::Translate::Processor
               entry["fuzzy"] = true
             end
 
-          # old default
-          when %r{^#\| msgid "(.*)"$}
-            entry["old_default"] = $1.to_s
-            # expect that this entry has no key
-            # if does, will be overwriten later
-            key = entry["old_default"].dup
-
           # key (context)
-          when %r{^msgctxt "(.*)"$}
+          when %r{^msgid "(.*)"$}
             key = $1.to_s.strip
             last = "key"
 
@@ -121,8 +114,7 @@ module I18n::Translate::Processor
         if value.kind_of?(String)
           # leave out msgctxt if using po strings as a key
           default = @translate.find(key, @translate.default)
-          entry << %~msgctxt #{key.inspect}~ if key != default
-          entry << %~msgid #{default.to_s.inspect}~
+          entry << %~msgid #{key.inspect}~ if key != default
           entry << %~msgstr #{value.to_s.inspect}~
         else
           entry << %~#  #{value["comment"].to_s.strip}~ unless value["comment"].to_s.strip.empty?
@@ -140,8 +132,7 @@ module I18n::Translate::Processor
           flags << value["flag"] unless value["flag"].to_s.strip.empty?
           entry << %~#, #{flags.join(", ")}~ unless flags.empty?
           entry << %~#| msgid #{value["old_default"].to_s.inspect}~ unless value["old_default"].to_s.empty?
-          entry << %~msgctxt #{key.inspect}~ if key != key_default
-          entry << %~msgid #{value["default"].to_s.inspect}~
+          entry << %~msgid #{key.inspect}~ if key != key_default
           entry << %~msgstr #{value["translation"].to_s.inspect}~
         end
 
